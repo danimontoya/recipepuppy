@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe_cardview_root"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:layout_marginStart="@dimen/activity_vertical_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginEnd="@dimen/activity_vertical_margin"
+    android:clickable="true"
+    android:focusable="true"
+    android:transitionGroup="true"
+    app:cardCornerRadius="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recipe_image"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:background="@android:color/white"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_logo_viewholder"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recipe_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="40dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@id/recipe_ingredients"
+            app:layout_constraintEnd_toStartOf="@id/recipe_favorite"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipe_image"
+            tools:text="Name"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recipe_ingredients"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/recipe_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipe_name"
+            tools:text="Ingredients Ingredients Ingred ients Ingredients Ingredients In gredients Ingredients Ingredients Ingredients Ingredients Ingredients "/>
+
+        <com.like.LikeButton
+            android:id="@+id/recipe_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="10dp"
+            app:anim_scale_factor="0.5"
+            app:circle_end_color="@color/colorPrimaryDark"
+            app:circle_start_color="@color/colorPrimaryLight"
+            app:dots_primary_color="@color/colorPrimaryDark"
+            app:dots_secondary_color="@color/colorPrimary"
+            app:icon_size="10dp"
+            app:icon_type="heart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/recipe_name"
+            app:layout_constraintTop_toBottomOf="@id/recipe_image"
+            app:liked="false"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

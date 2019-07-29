@@ -9,6 +9,5 @@ sealed class Failure {
 
     class NetworkConnection : BaseFailure()
     class ServerError(val throwable: Throwable?) : BaseFailure()
-    class PostsUsersError : BaseFailure()
     class BodyNullError : BaseFailure()
 }

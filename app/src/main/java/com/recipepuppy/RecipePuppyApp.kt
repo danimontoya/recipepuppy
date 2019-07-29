@@ -12,7 +12,7 @@ class RecipePuppyApp : Application() {
 
     companion object {
         var appContext: RecipePuppyApp? = null
-        var BASE_URL = "http://www.recipepuppy.com/api/"
+        var BASE_URL = "http://www.recipepuppy.com/"
     }
 
     val appComponent: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE) {

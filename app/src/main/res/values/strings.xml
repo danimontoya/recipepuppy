@@ -3,6 +3,6 @@
     <string name="toolbar_title">RecipePuppy</string>
 
     <!--Recipes-->
-    <string name="fragment_recipes_label">RecipePuppy</string>
+    <string name="fragment_recipes_label">Recipes</string>
 
 </resources>
