@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.recipepuppy.R
 import com.recipepuppy.core.exception.Failure
 import com.recipepuppy.core.extension.*
@@ -15,11 +16,17 @@ import com.recipepuppy.features.presentation.model.RecipeView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_recipes.*
+import timber.log.Timber
 
 /**
  * Created by danieh on 29/07/2019.
  */
 class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener, View.OnFocusChangeListener {
+
+    companion object {
+        private val TAG = RecipesFragment::class.java.simpleName
+        private const val ITEMS_BEFORE_FETCHING_NEXT_PAGE = 3
+    }
 
     override fun layoutId() = R.layout.fragment_recipes
 
@@ -30,6 +37,12 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener, View.OnF
     private lateinit var searchView: SearchView
 
     private var isSearching = false
+
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
+
+    private var loadingNewItems = false
+
+    private var searchingItems = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +64,6 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener, View.OnF
         }
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,7 +72,7 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener, View.OnF
             adapter = recipesAdapter
         }
 
-        viewModel.getRecipes("")
+        viewModel.getRecipes("onions,garlic")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -98,25 +110,64 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener, View.OnF
     private fun onRecipesFetched(recipes: List<RecipeView>?) {
         progress_recipes.gone()
         if (recipes != null && recipes.isNotEmpty()) {
+
+            if (recipesAdapter.itemCount == 0) {
+                scrollListener = object : RecyclerView.OnScrollListener() {
+
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+
+                        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                        val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                        Timber.tag(TAG).d("ItemCount=${recipesAdapter.itemCount}, lastVisibleItemPosition=$lastVisibleItemPosition")
+                        val isTimeToLoadMoreItems = ITEMS_BEFORE_FETCHING_NEXT_PAGE >= recipesAdapter.itemCount - lastVisibleItemPosition
+                        if (!loadingNewItems && isTimeToLoadMoreItems && !searchingItems) {
+                            loadingNewItems = true
+                            recipesAdapter.add(recipesAdapter.itemCount, LoadingItem())
+                            viewModel.getRecipesNextPage()
+                        }
+                    }
+                }
+                recycler_recipes.addOnScrollListener(scrollListener)
+            }
+
             val items = recipes.map { recipeView ->
                 RecipeItem(recipeView, clickListenerRecipe = { _ ->
                     Toast.makeText(context, "Recipe clicked!", Toast.LENGTH_SHORT).show()
                 }, clickListenerFav = { _, _ ->
                 })
             }
+            if (loadingNewItems) {
+                loadingNewItems = false
+                recipesAdapter.removeGroup(recipesAdapter.itemCount - 1)
+            }
             recipesAdapter.addAll(items)
             recycler_recipes.visible()
+
         } else if (recipesAdapter.itemCount > 0) {
-            Toast.makeText(context, getString(R.string.recipes_no_more_recipes), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.recipes_no_more_recipes), Toast.LENGTH_LONG).show()
+            removeScrollListener()
         } else {
-            Toast.makeText(context, getString(R.string.recipes_no_results), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.recipes_no_results), Toast.LENGTH_LONG).show()
+            removeScrollListener()
         }
+    }
+
+    private fun removeScrollListener() {
+        recycler_recipes.removeOnScrollListener(scrollListener)
     }
 
     private fun showError(failure: Failure?) {
         progress_recipes.gone()
         when (failure) {
-            is Failure.ServerError -> notify("ServerError")
+            is Failure.ServerError -> {
+                notify("ServerError")
+                if (loadingNewItems) {
+                    loadingNewItems = false
+                    recipesAdapter.removeGroup(recipesAdapter.itemCount - 1)
+                    removeScrollListener()
+                }
+            }
         }
     }
 }

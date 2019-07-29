@@ -29,6 +29,12 @@ class RecipesViewModel @Inject constructor(private val getRecipesUseCase: GetRec
         }
     }
 
+    fun getRecipesNextPage() {
+        getRecipesUseCase(GetRecipesUseCase.Params(currentIngredients, currentPage)) {
+            it.fold(::handleFailure, ::handleRecipes)
+        }
+    }
+
     private fun handleRecipes(recipes: List<Recipe>) {
         recipeList.value = recipes.map { it.toRecipeView() }
         currentPage++
