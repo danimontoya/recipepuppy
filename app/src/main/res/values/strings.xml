@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RecipePuppy</string>
+    <string name="toolbar_title">RecipePuppy</string>
+
+    <!--Recipes-->
+    <string name="fragment_recipes_label">RecipePuppy</string>
+
 </resources>
