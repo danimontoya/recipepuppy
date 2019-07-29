@@ -5,12 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recipe_cardview_root"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/activity_vertical_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
     android:layout_marginEnd="@dimen/activity_vertical_margin"
     android:clickable="true"
     android:focusable="true"
+    android:minHeight="300dp"
     android:transitionGroup="true"
     app:cardCornerRadius="6dp">
 
@@ -30,12 +31,26 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/ic_logo_viewholder"/>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recipe_lactose_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:rotation="65"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_label_contains_lactose"
+            tools:visibility="visible"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipe_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="40dp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -50,14 +65,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="8dp"
-            android:ellipsize="end"
-            android:maxLines="3"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/recipe_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recipe_name"
-            tools:text="Ingredients Ingredients Ingred ients Ingredients Ingredients In gredients Ingredients Ingredients Ingredients Ingredients Ingredients "/>
+            tools:text="Ingredients Ingr edients Ingred ients In gredients Ingr edients In gredients Ingr ed ients Ingred ients Ingred ients Ingredients Ingre dients "/>
 
         <com.like.LikeButton
             android:id="@+id/recipe_favorite"

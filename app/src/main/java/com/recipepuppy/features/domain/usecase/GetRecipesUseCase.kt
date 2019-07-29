@@ -11,7 +11,7 @@ import javax.inject.Inject
 class GetRecipesUseCase @Inject constructor(private val recipesRepository: RecipesRepository) :
     UseCase<List<Recipe>, GetRecipesUseCase.Params>() {
 
-    override suspend fun run(params: Params) = recipesRepository.recipes(params.ingredients, params.query, params.page)
+    override suspend fun run(params: Params) = recipesRepository.recipes(params.ingredients, params.page)
 
-    data class Params(val ingredients: String, val query: String, val page: Int)
+    data class Params(val ingredients: String, val page: Int)
 }

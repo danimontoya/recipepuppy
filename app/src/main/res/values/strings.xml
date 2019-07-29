@@ -2,7 +2,12 @@
     <string name="app_name">RecipePuppy</string>
     <string name="toolbar_title">RecipePuppy</string>
 
+    <string name="action_search">Search</string>
+
     <!--Recipes-->
     <string name="fragment_recipes_label">Recipes</string>
+    <string name="recipes_menu_search_hint">Ingredients:</string>
+    <string name="recipes_no_more_recipes">That\'s all we have matching with those ingredients!</string>
+    <string name="recipes_no_results">No results for that search.. try something else!</string>
 
 </resources>

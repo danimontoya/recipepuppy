@@ -13,15 +13,24 @@ import javax.inject.Inject
 class RecipesViewModel @Inject constructor(private val getRecipesUseCase: GetRecipesUseCase) : BaseViewModel() {
 
     var recipeList: MutableLiveData<List<RecipeView>> = MutableLiveData()
+    var restartSearch: MutableLiveData<Boolean> = MutableLiveData()
 
-    private var page: Int = 1
+    private var currentPage: Int = 1
+    private var currentIngredients: String = "onions,garlic"
 
-    fun getRecipes(ingredients: String, query: String) = getRecipesUseCase(GetRecipesUseCase.Params(ingredients, query, page)) {
-        it.fold(::handleFailure, ::handleRecipes)
+    fun getRecipes(ingredients: String) {
+        if (currentIngredients != ingredients) {
+            currentIngredients = ingredients
+            currentPage = 1
+            restartSearch.value = true
+        }
+        getRecipesUseCase(GetRecipesUseCase.Params(currentIngredients, currentPage)) {
+            it.fold(::handleFailure, ::handleRecipes)
+        }
     }
 
     private fun handleRecipes(recipes: List<Recipe>) {
         recipeList.value = recipes.map { it.toRecipeView() }
-        page++
+        currentPage++
     }
 }

@@ -1,13 +1,22 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorAccent</item>
 
         <item name="colorControlNormal">@android:color/white</item>
+
+        <item name="searchViewStyle">@style/AppTheme.RecipesSearchView</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorHint">@color/white_light</item>
+    </style>
+
+    <style name="AppTheme.RecipesSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="queryHint">@string/recipes_menu_search_hint</item>
     </style>
 
 </resources>

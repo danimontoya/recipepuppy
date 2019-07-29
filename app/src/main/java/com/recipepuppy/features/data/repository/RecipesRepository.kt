@@ -13,18 +13,17 @@ import javax.inject.Inject
  */
 interface RecipesRepository {
 
-    fun recipes(ingredients: String, query: String, page: Int): Either<Failure, List<Recipe>>
+    fun recipes(ingredients: String, page: Int): Either<Failure, List<Recipe>>
 
     class Network @Inject constructor(private val networkHandler: NetworkHandler, private val service: RecipesService) :
         RecipesRepository {
 
-        override fun recipes(ingredients: String, query: String, page: Int): Either<Failure, List<Recipe>> {
+        override fun recipes(ingredients: String, page: Int): Either<Failure, List<Recipe>> {
             return when (networkHandler.isConnected) {
                 true -> request(
                     service.recipes(
                         mapOf(
                             "i" to ingredients,
-                            "q" to query,
                             "p" to page.toString()
                         )
                     )
