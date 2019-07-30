@@ -3,6 +3,7 @@ package com.recipepuppy.core.di
 import com.recipepuppy.RecipePuppyApp
 import com.recipepuppy.core.di.viewmodel.ViewModelModule
 import com.recipepuppy.features.presentation.MainActivity
+import com.recipepuppy.features.presentation.recipedetails.RecipeDetailsFragment
 import com.recipepuppy.features.presentation.recipes.RecipesFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -19,4 +20,6 @@ interface ApplicationComponent {
     fun inject(mainActivity: MainActivity)
 
     fun inject(recipesFragment: RecipesFragment)
+
+    fun inject(recipeDetailsFragment: RecipeDetailsFragment)
 }

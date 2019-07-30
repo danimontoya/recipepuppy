@@ -10,4 +10,8 @@
     <string name="recipes_no_more_recipes">That\'s all we have matching with those ingredients!</string>
     <string name="recipes_no_results">No results for that search.. try something else!</string>
 
+    <!--Recipe Details-->
+    <string name="fragment_recipe_details_label">Recipe Details</string>
+    <string name="recipe_details_no_href">Sorry, cannot access to the details of this recipe.\nPlease contact our support team, thanks!</string>
+
 </resources>

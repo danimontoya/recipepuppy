@@ -7,8 +7,10 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.recipepuppy.R
 import com.recipepuppy.core.exception.Failure
 import com.recipepuppy.core.extension.*
@@ -123,10 +125,20 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
                 addScrollListener()
             }
             val items = recipes.map { recipeView ->
-                RecipeItem(recipeView, clickListenerRecipe = { _ ->
-                    Toast.makeText(context, "Recipe clicked!", Toast.LENGTH_SHORT).show()
-                }, clickListenerFav = { _, _ ->
-                })
+                RecipeItem(recipeView,
+                        clickListenerRecipe = { recipe ->
+                            if (recipe.href.isNotEmpty()) {
+                                val navDirections = RecipesFragmentDirections.actionRecipesFragmentToRecipeDetailsFragment().apply {
+                                    href = recipe.href
+                                    name = recipe.title
+                                }
+                                findNavController().navigate(navDirections)
+                            } else {
+                                Snackbar.make(recipes_root, R.string.recipe_details_no_href, Snackbar.LENGTH_LONG).show()
+                            }
+                        },
+                        clickListenerFav = { _, _ ->
+                        })
             }
             if (loadingNewItems) {
                 loadingNewItems = false
@@ -171,6 +183,7 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
         progress_recipes.gone()
         when (failure) {
             is Failure.ServerError -> {
+                Timber.tag(TAG).d("Server error: ${failure.throwable?.message}")
                 if (loadingNewItems) {
                     loadingNewItems = false
                     recipesAdapter.removeGroup(recipesAdapter.itemCount - 1)
