@@ -16,7 +16,7 @@ class RecipesViewModel @Inject constructor(private val getRecipesUseCase: GetRec
     var restartSearch: MutableLiveData<Boolean> = MutableLiveData()
 
     private var currentPage: Int = 1
-    private var currentIngredients: String = "onions,garlic"
+    private var currentIngredients: String = ""
 
     fun getRecipes(ingredients: String) {
         if (currentIngredients != ingredients) {

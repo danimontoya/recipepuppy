@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="20dp"
             android:ellipsize="end"
             android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@id/recipe_ingredients"
@@ -73,25 +73,18 @@
             app:layout_constraintTop_toBottomOf="@id/recipe_name"
             tools:text="Ingredients Ingr edients Ingred ients In gredients Ingr edients In gredients Ingr ed ients Ingred ients Ingred ients Ingredients Ingre dients "/>
 
-        <com.like.LikeButton
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/recipe_favorite"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
-            app:anim_scale_factor="0.5"
-            app:circle_end_color="@color/colorPrimaryDark"
-            app:circle_start_color="@color/colorPrimaryLight"
-            app:dots_primary_color="@color/colorPrimaryDark"
-            app:dots_secondary_color="@color/colorPrimary"
-            app:icon_size="10dp"
-            app:icon_type="heart"
+            app:srcCompat="@mipmap/ic_heart_off"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/recipe_name"
-            app:layout_constraintTop_toBottomOf="@id/recipe_image"
-            app:liked="false"/>
+            app:layout_constraintTop_toBottomOf="@id/recipe_image"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

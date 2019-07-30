@@ -3,8 +3,6 @@ package com.recipepuppy.features.presentation.recipes
 import android.view.animation.OvershootInterpolator
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.like.LikeButton
-import com.like.OnLikeListener
 import com.recipepuppy.R
 import com.recipepuppy.core.extension.gone
 import com.recipepuppy.core.extension.visible
@@ -18,6 +16,7 @@ import kotlinx.android.synthetic.main.layout_row_recipe.view.*
  */
 class RecipeItem(
         private val recipeView: RecipeView,
+        private var isFavorite: Boolean = false,
         private val clickListenerRecipe: (RecipeView) -> Unit = { _ -> },
         private val clickListenerFav: (RecipeView, isFavorite: Boolean) -> Unit = { _, _ -> }
 ) : Item() {
@@ -34,6 +33,11 @@ class RecipeItem(
                     .into(itemView.recipe_image)
             itemView.recipe_name.text = recipeView.title
             itemView.recipe_ingredients.text = recipeView.ingredients
+            if (isFavorite) {
+                itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_on)
+            } else {
+                itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_off)
+            }
 
             if (recipeView.ingredients.contains("milk") or recipeView.ingredients.contains("cheese")) {
                 animateLactoseLabel()
@@ -43,18 +47,11 @@ class RecipeItem(
             }
 
             itemView.setOnClickListener { clickListenerRecipe(recipeView) }
-            itemView.recipe_favorite.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton?) {
-                    likeButton?.isLiked = true
-                    clickListenerFav(recipeView, true)
-                }
-
-                override fun unLiked(likeButton: LikeButton?) {
-                    likeButton?.isLiked = false
-                    clickListenerFav(recipeView, false)
-                }
-
-            })
+            itemView.recipe_favorite.setOnClickListener {
+                isFavorite = !isFavorite
+                animateFavIcon()
+                clickListenerFav(recipeView, isFavorite)
+            }
         }
     }
 
@@ -67,6 +64,28 @@ class RecipeItem(
             itemView.recipe_lactose_image.animation.cancel()
         }
         itemView.recipe_lactose_image.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setInterpolator(OvershootInterpolator(3.0f))
+                .setDuration(500)
+                .setStartDelay(300)
+                .start()
+    }
+
+    private fun ViewHolder.animateFavIcon() {
+        itemView.recipe_favorite.apply {
+            scaleX = 0f
+            scaleY = 0f
+        }
+        if (itemView.recipe_lactose_image.animation != null) {
+            itemView.recipe_lactose_image.animation.cancel()
+        }
+        if (isFavorite) {
+            itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_on)
+        } else {
+            itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_off)
+        }
+        itemView.recipe_favorite.animate()
                 .scaleX(1f)
                 .scaleY(1f)
                 .setInterpolator(OvershootInterpolator(3.0f))
