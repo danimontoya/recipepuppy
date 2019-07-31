@@ -16,10 +16,10 @@ import javax.inject.Inject
  * Created by danieh on 29/07/2019.
  */
 class RecipesViewModel @Inject constructor(
-    private val getRecipesUseCase: GetRecipesUseCase,
-    private val getFavoriteRecipesUseCase: GetFavoriteRecipesUseCase,
-    private val saveRecipeUseCase: SaveRecipeUseCase,
-    private val deleteRecipeUseCase: DeleteRecipeUseCase
+        private val getRecipesUseCase: GetRecipesUseCase,
+        private val getFavoriteRecipesUseCase: GetFavoriteRecipesUseCase,
+        private val saveRecipeUseCase: SaveRecipeUseCase,
+        private val deleteRecipeUseCase: DeleteRecipeUseCase
 ) : BaseViewModel() {
 
     var recipeList: MutableLiveData<List<RecipeView>> = MutableLiveData()
@@ -49,11 +49,11 @@ class RecipesViewModel @Inject constructor(
     }
 
     fun saveRecipe(recipeView: RecipeView) = saveRecipeUseCase(SaveRecipeUseCase.Params(recipeView)) {
-        it.fold(::handleFailure, ::handleRecipeSaved)
+        it.fold(::handleFailure) {}
     }
 
     fun deleteRecipe(href: String) = deleteRecipeUseCase(DeleteRecipeUseCase.Params(href)) {
-        it.fold(::handleFailure, ::handleRecipeDeleted)
+        it.fold(::handleFailure) {}
     }
 
     private fun handleRecipes(recipesResult: RecipesResult) {
@@ -72,13 +72,5 @@ class RecipesViewModel @Inject constructor(
         val recipesView = recipes.map { it.toRecipeView() }
         recipesView.map { it.isFavorite = true }
         favoriteRecipes.value = recipesView
-    }
-
-    private fun handleRecipeSaved(saved: Boolean) {
-        // not needed atm
-    }
-
-    private fun handleRecipeDeleted(saved: Boolean) {
-        // not needed atm
     }
 }
