@@ -15,8 +15,7 @@ import kotlinx.android.synthetic.main.layout_row_recipe.view.*
  * Created by danieh on 29/07/2019.
  */
 class RecipeItem(
-        private val recipeView: RecipeView,
-        private var isFavorite: Boolean = false,
+        val recipeView: RecipeView,
         private val clickListenerRecipe: (RecipeView) -> Unit = { _ -> },
         private val clickListenerFav: (RecipeView, isFavorite: Boolean) -> Unit = { _, _ -> }
 ) : Item() {
@@ -33,7 +32,7 @@ class RecipeItem(
                     .into(itemView.recipe_image)
             itemView.recipe_name.text = recipeView.title
             itemView.recipe_ingredients.text = recipeView.ingredients
-            if (isFavorite) {
+            if (recipeView.isFavorite) {
                 itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_on)
             } else {
                 itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_off)
@@ -48,9 +47,9 @@ class RecipeItem(
 
             itemView.setOnClickListener { clickListenerRecipe(recipeView) }
             itemView.recipe_favorite.setOnClickListener {
-                isFavorite = !isFavorite
+                recipeView.isFavorite = !recipeView.isFavorite
                 animateFavIcon()
-                clickListenerFav(recipeView, isFavorite)
+                clickListenerFav(recipeView, recipeView.isFavorite)
             }
         }
     }
@@ -80,7 +79,7 @@ class RecipeItem(
         if (itemView.recipe_lactose_image.animation != null) {
             itemView.recipe_lactose_image.animation.cancel()
         }
-        if (isFavorite) {
+        if (recipeView.isFavorite) {
             itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_on)
         } else {
             itemView.recipe_favorite.setImageResource(R.mipmap.ic_heart_off)

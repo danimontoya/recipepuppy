@@ -11,5 +11,6 @@ data class RecipeView(
     val href: String,
     val ingredients: String,
     val thumbnail: String,
-    val title: String
+    val title: String,
+    var isFavorite: Boolean = false
 ) : Parcelable

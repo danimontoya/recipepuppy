@@ -19,6 +19,7 @@ class RecipePuppyApp : Application() {
         DaggerApplicationComponent
             .builder()
             .applicationModule(ApplicationModule(this))
+            .databaseModule(DatabaseModule(this))
             .networkModule(NetworkModule(BASE_URL))
             .dataModule(DataModule())
             .build()

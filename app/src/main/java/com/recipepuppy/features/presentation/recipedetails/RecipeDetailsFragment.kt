@@ -1,11 +1,12 @@
 package com.recipepuppy.features.presentation.recipedetails
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.net.http.SslError
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import com.recipepuppy.R
 import com.recipepuppy.core.extension.gone
 import com.recipepuppy.core.platform.BaseFragment
@@ -39,6 +40,7 @@ class RecipeDetailsFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,9 +51,39 @@ class RecipeDetailsFragment : BaseFragment() {
 
         recipe_details_webview.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
                 if (recipe_details_loader != null) {
                     recipe_details_loader.gone()
                 }
+            }
+
+            override fun onPageFinished(view: WebView, url: String) {
+                super.onPageFinished(view, url)
+                Timber.tag(TAG).d("onPageFinished")
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                super.onReceivedError(view, request, error)
+                Timber.tag(TAG).d("onReceivedError: Your Internet Connection May not be active Or ${error?.description}")
+            }
+
+            override fun onReceivedHttpError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                errorResponse: WebResourceResponse?
+            ) {
+                super.onReceivedHttpError(view, request, errorResponse)
+                Timber.tag(TAG).d("onReceivedHttpError: $errorResponse")
+            }
+
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+                super.onReceivedSslError(view, handler, error)
+                Timber.tag(TAG).d("onReceivedSslError: $error")
+            }
+
+            override fun onReceivedClientCertRequest(view: WebView?, request: ClientCertRequest?) {
+                super.onReceivedClientCertRequest(view, request)
+                Timber.tag(TAG).d("onReceivedClientCertRequest $request")
             }
         }
 

@@ -1,5 +1,6 @@
 package com.recipepuppy.features.domain.model
 
+import com.recipepuppy.features.data.room.entity.RecipeInfo
 import com.recipepuppy.features.presentation.model.RecipeView
 
 /**
@@ -12,6 +13,8 @@ data class Recipe(
     private val title: String
 ) {
     fun toRecipeView() = RecipeView(href, ingredients, thumbnail, title)
+
+    fun toRecipeInfo() = RecipeInfo(href, ingredients, thumbnail, title)
 
     companion object {
         fun empty() = Recipe("", "", "", "")

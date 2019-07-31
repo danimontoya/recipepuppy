@@ -3,6 +3,7 @@
     <string name="toolbar_title">RecipePuppy</string>
 
     <string name="action_search">Search</string>
+    <string name="action_favorites">Favorite Recipes</string>
 
     <!--Recipes-->
     <string name="fragment_recipes_label">Recipes</string>
@@ -13,5 +14,9 @@
     <!--Recipe Details-->
     <string name="fragment_recipe_details_label">Recipe Details</string>
     <string name="recipe_details_no_href">Sorry, cannot access to the details of this recipe.\nPlease contact our support team, thanks!</string>
+
+    <!--Favorite Recipes-->
+    <string name="fragment_favorite_recipes_label">Favorite Recipes</string>
+    <string name="recipes_no_fav_results">There aren\'t any recipes saved yet!</string>
 
 </resources>

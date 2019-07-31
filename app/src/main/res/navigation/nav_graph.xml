@@ -15,6 +15,10 @@
             android:id="@+id/action_recipesFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment"/>
 
+        <action
+            android:id="@+id/action_recipesFragment_to_favoriteRecipesFragment"
+            app:destination="@id/favoriteRecipesFragment"/>
+
     </fragment>
 
     <fragment
@@ -33,4 +37,17 @@
             android:defaultValue="name"
             app:argType="string"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/favoriteRecipesFragment"
+        android:name="com.recipepuppy.features.presentation.favoriterecipes.FavoriteRecipesFragment"
+        android:label="@string/fragment_favorite_recipes_label"
+        tools:layout="@layout/fragment_favorite_recipes">
+
+        <action
+            android:id="@+id/action_favoriteRecipesFragment_to_recipeDetailsFragment"
+            app:destination="@id/recipeDetailsFragment"/>
+
+    </fragment>
+
 </navigation>

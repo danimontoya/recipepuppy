@@ -11,8 +11,11 @@
         <item name="colorControlNormal">@android:color/white</item>
 
         <item name="searchViewStyle">@style/AppTheme.RecipesSearchView</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorHint">@color/white_light</item>
+
+        <item name="android:itemBackground">@color/colorPrimaryLight</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
     </style>
 
     <style name="AppTheme.RecipesSearchView" parent="Widget.AppCompat.SearchView">

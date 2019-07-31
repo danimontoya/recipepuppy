@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -54,6 +55,7 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
         viewModel = viewModel(viewModelFactory) {
             observe(recipeList, ::onRecipesFetched)
+            observe(favoriteRecipes, ::onFavRecipesFetched)
             observe(restartSearch, ::onRestartSearch)
             failure(failure, ::showError)
         }
@@ -76,8 +78,10 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
             layoutManager = LinearLayoutManager(context)
             adapter = recipesAdapter
         }
+        addScrollListener()
 
         fetchRecipes("")
+        viewModel.getFavoriteRecipes()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,6 +93,16 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
         searchView.apply {
             setOnQueryTextListener(this@RecipesFragment)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_favorites -> {
+                findNavController().navigate(RecipesFragmentDirections.actionRecipesFragmentToFavoriteRecipesFragment())
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -121,24 +135,27 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
     private fun onRecipesFetched(recipes: List<RecipeView>?) {
         progress_recipes.gone()
         if (recipes != null && recipes.isNotEmpty()) {
-            if (recipesAdapter.itemCount == 0) {
-                addScrollListener()
-            }
             val items = recipes.map { recipeView ->
                 RecipeItem(recipeView,
-                        clickListenerRecipe = { recipe ->
-                            if (recipe.href.isNotEmpty()) {
-                                val navDirections = RecipesFragmentDirections.actionRecipesFragmentToRecipeDetailsFragment().apply {
+                    clickListenerRecipe = { recipe ->
+                        if (recipe.href.isNotEmpty()) {
+                            val navDirections =
+                                RecipesFragmentDirections.actionRecipesFragmentToRecipeDetailsFragment().apply {
                                     href = recipe.href
                                     name = recipe.title
                                 }
-                                findNavController().navigate(navDirections)
-                            } else {
-                                Snackbar.make(recipes_root, R.string.recipe_details_no_href, Snackbar.LENGTH_LONG).show()
-                            }
-                        },
-                        clickListenerFav = { _, _ ->
-                        })
+                            findNavController().navigate(navDirections)
+                        } else {
+                            Snackbar.make(recipes_root, R.string.recipe_details_no_href, Snackbar.LENGTH_LONG).show()
+                        }
+                    },
+                    clickListenerFav = { recipe, isFavorite ->
+                        if (isFavorite) {
+                            viewModel.saveRecipe(recipe)
+                        } else {
+                            viewModel.deleteRecipe(recipe.href)
+                        }
+                    })
             }
             if (loadingNewItems) {
                 loadingNewItems = false
@@ -149,10 +166,20 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
         } else if (recipesAdapter.itemCount > 0) {
             Toast.makeText(context, getString(R.string.recipes_no_more_recipes), Toast.LENGTH_LONG).show()
-            removeScrollListener()
         } else {
             Toast.makeText(context, getString(R.string.recipes_no_results), Toast.LENGTH_LONG).show()
-            removeScrollListener()
+        }
+    }
+
+    private fun onFavRecipesFetched(favRecipes: List<RecipeView>?) {
+        favRecipes?.let {
+            if (it.isNotEmpty()) {
+                for (i in 0 until recipesAdapter.itemCount) {
+                    val recipeItem = recipesAdapter.getItem(i) as RecipeItem
+                    recipeItem.recipeView.isFavorite =
+                        favRecipes.find { favRecipe -> recipeItem.recipeView.href == favRecipe.href } != null
+                }
+            }
         }
     }
 
@@ -164,7 +191,8 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                val isTimeToLoadMoreItems = ITEMS_BEFORE_FETCHING_NEXT_PAGE >= recipesAdapter.itemCount - lastVisibleItemPosition
+                val isTimeToLoadMoreItems =
+                    ITEMS_BEFORE_FETCHING_NEXT_PAGE >= recipesAdapter.itemCount - lastVisibleItemPosition
                 if (!loadingNewItems && isTimeToLoadMoreItems) {
                     loadingNewItems = true
                     recipesAdapter.add(recipesAdapter.itemCount, LoadingItem())
@@ -177,6 +205,7 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
     private fun removeScrollListener() {
         recycler_recipes.removeOnScrollListener(scrollListener)
+        Timber.tag(TAG).d("removeScrollListener: ${Exception().printStackTrace()}")
     }
 
     private fun showError(failure: Failure?) {
