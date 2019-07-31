@@ -14,6 +14,6 @@ sealed class Failure {
     class BodyNullError : BaseFailure()
     class GetRecipesError : BaseFailure()
     class DbGetFavoriteRecipesError(val exception: Exception) : BaseFailure()
-    class DbInsertError(val exception: Exception) : BaseFailure()
-    class DbDeleteError(val exception: Exception) : BaseFailure()
+    class DbInsertError : BaseFailure()
+    class DbDeleteError : BaseFailure()
 }

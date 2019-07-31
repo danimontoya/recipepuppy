@@ -7,7 +7,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 /**
  * Created by danieh on 29/07/2019.
  */
-class LoadingItem() : Item() {
+class LoadingItem : Item() {
 
     override fun getLayout(): Int = R.layout.layout_row_loader
 

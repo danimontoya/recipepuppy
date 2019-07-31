@@ -146,7 +146,7 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
                                 }
                             findNavController().navigate(navDirections)
                         } else {
-                            Snackbar.make(recipes_root, R.string.recipe_details_no_href, Snackbar.LENGTH_LONG).show()
+                            notify(getString(R.string.recipe_details_no_href))
                         }
                     },
                     clickListenerFav = { recipe, isFavorite ->
@@ -165,9 +165,9 @@ class RecipesFragment : BaseFragment(), SearchView.OnQueryTextListener {
             recycler_recipes.visible()
 
         } else if (recipesAdapter.itemCount > 0) {
-            Toast.makeText(context, getString(R.string.recipes_no_more_recipes), Toast.LENGTH_LONG).show()
+            notify(getString(R.string.recipes_no_more_recipes))
         } else {
-            Toast.makeText(context, getString(R.string.recipes_no_results), Toast.LENGTH_LONG).show()
+            notify(getString(R.string.recipes_no_results))
         }
     }
 

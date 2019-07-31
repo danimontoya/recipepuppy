@@ -62,7 +62,7 @@ interface RecipesRepository {
                 launch { result = recipeInfoDao.insert(recipe.toRecipeInfo()) }.join()
                 result?.let {
                     Either.Right(true)
-                } ?: Either.Left(Failure.DbInsertError(Exception("Couldn't insert the item in the database")))
+                } ?: Either.Left(Failure.DbInsertError())
             }
         }
 
@@ -72,7 +72,7 @@ interface RecipesRepository {
                 launch { result = recipeInfoDao.delete(href) }.join()
                 result?.let {
                     Either.Right(true)
-                } ?: Either.Left(Failure.DbDeleteError(Exception("Couldn't delete the item from the database")))
+                } ?: Either.Left(Failure.DbDeleteError())
             }
         }
 
